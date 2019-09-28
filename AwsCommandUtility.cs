@@ -5,7 +5,7 @@ using System.IO;
 
 namespace AwsEc2Manager
 {
-    public static class AwsCommandWrapper
+    public static class AwsCommandUtility
     {
         public static string Ssh(string publicDns)
         {

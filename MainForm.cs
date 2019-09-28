@@ -42,7 +42,7 @@ namespace AwsEc2Manager
                 if (senderGrid.Columns[e.ColumnIndex].Name == "Start")
                 {
                     string command = "ec2 start-instances --instance-ids " + servers[e.RowIndex].Id;
-                    string result = AwsCommandWrapper.Call(command);
+                    string result = AwsCommandUtility.Call(command);
                     resultTextBox.Text += "\r\n" + result;
                     Refresh();
                 }
@@ -50,14 +50,14 @@ namespace AwsEc2Manager
                 if (senderGrid.Columns[e.ColumnIndex].Name == "Stop")
                 {
                     string command = "ec2 stop-instances --instance-ids " + servers[e.RowIndex].Id;
-                    string result = AwsCommandWrapper.Call(command);
+                    string result = AwsCommandUtility.Call(command);
                     resultTextBox.Text = result;
                     Refresh();
                 }
 
                 if (senderGrid.Columns[e.ColumnIndex].Name == "SSH")
                 {
-                    string result = AwsCommandWrapper.Ssh(servers[e.RowIndex].PublicDns);
+                    string result = AwsCommandUtility.Ssh(servers[e.RowIndex].PublicDns);
                     resultTextBox.Text = result;
                 }
                 //TODO - Button Clicked - Execute Code Here
@@ -66,7 +66,7 @@ namespace AwsEc2Manager
 
         private void Refresh()
         {
-            servers = AwsCommandWrapper.GetServers();
+            servers = AwsCommandUtility.GetServers();
             bindingSource1.DataSource = servers;
             lastRefreshToolStripLabel.Text = "Last Refreshed: " + DateTime.Now.ToString();
         }
