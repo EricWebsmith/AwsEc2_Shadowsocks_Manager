@@ -19,6 +19,14 @@ namespace AwsEc2Manager
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+            this.workingDirTextBox.Text = Properties.Settings.Default.working_dir;
+            this.pemTextBox.Text = Properties.Settings.Default.pem_file;
+            //if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.working_dir) && !string.IsNullOrWhiteSpace(Properties.Settings.Default.pem_file)) 
+            //{
+                
+                
+            //}
             Refresh();
             timer1.Start();
         }
@@ -30,14 +38,17 @@ namespace AwsEc2Manager
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
                 e.RowIndex >= 0)
             {
+                var copy_cell = senderGrid.Rows[e.RowIndex].Cells[3] as DataGridViewButtonCell;
+                
                 if (senderGrid.Columns[e.ColumnIndex].Name == "CopyIP")
                 {
                     if (!string.IsNullOrWhiteSpace(servers[e.RowIndex].IP))
                     {
                         Clipboard.SetText(servers[e.RowIndex].IP);
+                        copy_cell.Value = "Copied";
+                        //(senderGrid.Columns[e.ColumnIndex] as DataGridViewButtonColumn).Text = "Copied";
                     }
                 }
-
 
                 if (senderGrid.Columns[e.ColumnIndex].Name == "Start")
                 {
@@ -45,6 +56,7 @@ namespace AwsEc2Manager
                     string result = AwsCommandUtility.Call(command);
                     resultTextBox.Text += "\r\n" + result;
                     Refresh();
+                    copy_cell.Value = "";
                 }
 
                 if (senderGrid.Columns[e.ColumnIndex].Name == "Stop")
@@ -53,6 +65,7 @@ namespace AwsEc2Manager
                     string result = AwsCommandUtility.Call(command);
                     resultTextBox.Text = result;
                     Refresh();
+                    copy_cell.Value = "";
                 }
 
                 if (senderGrid.Columns[e.ColumnIndex].Name == "SSH")
@@ -103,6 +116,10 @@ namespace AwsEc2Manager
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
+            //if (string.IsNullOrWhiteSpace(Properties.Settings.Default.working_dir) || string.IsNullOrWhiteSpace(Properties.Settings.Default.pem_file))
+            //{
+            //    return;
+            //}
             Refresh();
         }
 
@@ -112,10 +129,26 @@ namespace AwsEc2Manager
             ContextMenuStrip context = (ContextMenuStrip)contextMenu.Owner;
             DataGridView gridView = (DataGridView)context.SourceControl;
             var cell = (DataGridViewTextBoxCell)gridView.CurrentCell;
-
-
-
+            cell.Value = "Copied";
             Clipboard.SetText(cell.Value.ToString());
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.pem_file = this.pemTextBox.Text;
+            Properties.Settings.Default.working_dir = this.workingDirTextBox.Text;
+            Properties.Settings.Default.Save();
+
+        }
+
+        private void pemTextBox_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.pem_file = this.pemTextBox.Text;
+        }
+
+        private void workingDirTextBox_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.working_dir = this.workingDirTextBox.Text;
         }
     }
 }

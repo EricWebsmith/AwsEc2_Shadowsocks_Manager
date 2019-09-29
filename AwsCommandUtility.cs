@@ -11,9 +11,9 @@ namespace AwsEc2Manager
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.UseShellExecute = false;
-            startInfo.WorkingDirectory = @"C:\Users\eric";
+            startInfo.WorkingDirectory = Properties.Settings.Default.working_dir;
             startInfo.FileName = "ssh";
-            startInfo.Arguments = $" -i usa.pem ec2-user@{publicDns}";
+            startInfo.Arguments = $" -i \"{Properties.Settings.Default.pem_file}\" ec2-user@{publicDns}";
             startInfo.RedirectStandardError = true;
             Process p = Process.Start(startInfo);
             using (StreamReader errorReader = p.StandardError)
@@ -32,7 +32,7 @@ namespace AwsEc2Manager
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
-            startInfo.WorkingDirectory = @"C:\Users\eric";
+            startInfo.WorkingDirectory = Properties.Settings.Default.working_dir;
             startInfo.FileName = "aws";
             startInfo.Arguments = arguments;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
