@@ -114,6 +114,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="README.md" />
     <None Include="Resources\clock-black.png" />
   </ItemGroup>
   <ItemGroup>
