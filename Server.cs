@@ -15,5 +15,7 @@ namespace AwsEc2Manager
         public string IP { get; set; }
 
         public DateTime LaunchTime { get; set; }
+
+        public string Copy { get; set; }
     }
 }
