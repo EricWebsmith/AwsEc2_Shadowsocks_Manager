@@ -37,7 +37,6 @@ namespace AwsEc2Manager
             startInfo.Arguments = arguments;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.CreateNoWindow = true;
-            //startInfo.Arguments=""
             Process p = Process.Start(startInfo);
             StreamReader sr = p.StandardOutput;
             string output = sr.ReadToEnd();
@@ -59,6 +58,7 @@ namespace AwsEc2Manager
                     server.Name = instance["Tags"][0]["Value"].Value;
                     server.State = instance["State"]["Name"].Value;
                     server.LaunchTime = instance["LaunchTime"].Value;
+                    server.LaunchTime = server.LaunchTime.ToLocalTime();
                     server.PublicDns = instance["PublicDnsName"].Value;
                     server.IP = instance["PublicIpAddress"]?.Value;
                     servers.Add(server);
